@@ -15,6 +15,7 @@
 #include "supervisor_execution/GoTo.hpp"
 #include "supervisor_execution/Listen.hpp"
 #include "supervisor_execution/Say.hpp"
+#include "supervisor_execution/Save.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -46,6 +47,7 @@ private:
   Say say_authorizer_;
   Listen listen_authorizer_;
   Check check_authorizer_;
+  Save save_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_

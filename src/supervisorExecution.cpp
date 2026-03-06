@@ -83,6 +83,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return check_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "save")
+  {
+    return save_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,
     "Unsupported action '" + req.action + "'",

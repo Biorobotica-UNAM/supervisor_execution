@@ -19,6 +19,7 @@ add_executable(supervisor_execution_node
   src/Say.cpp
   src/Listen.cpp
   src/Check.cpp
+  src/Save.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC
