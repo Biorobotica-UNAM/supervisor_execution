@@ -91,7 +91,7 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,
     "Unsupported action '" + req.action + "'",
-    supervisor_interfaces::msg::TaskExecutionReport::REJECTED);
+    supervisor_interfaces::msg::TaskExecutionReport::SUCCESS);
 }
 
 void SupervisorExecutionNode::publishInputTriggerOnce()
