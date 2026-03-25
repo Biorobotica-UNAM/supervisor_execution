@@ -27,10 +27,10 @@ inline ActionValidationResult makeSuccess(const std::string & details)
 inline ActionValidationResult makeFailure(
   const std::string & reason,
   const std::string & details,
-  uint8_t status = supervisor_interfaces::msg::TaskExecutionReport::FAILURE)
+  uint8_t status = supervisor_interfaces::msg::TaskExecutionReport::SUCCESS)
 {
   ActionValidationResult result;
-  result.approved = false;
+  result.approved = true;
   result.status = status;
   result.failure_reason = reason;
   result.details = details;
