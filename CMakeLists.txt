@@ -10,10 +10,16 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(supervisor_executor_interfaces REQUIRED)
+find_package(supervisor_interfaces REQUIRED)
 
 add_executable(supervisor_execution_node
   src/supervisor_execution_node.cpp
   src/supervisorExecution.cpp
+  src/GoTo.cpp
+  src/Say.cpp
+  src/Listen.cpp
+  src/Check.cpp
+  src/Save.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC
@@ -25,6 +31,7 @@ ament_target_dependencies(supervisor_execution_node
   rclcpp
   std_msgs
   supervisor_executor_interfaces
+  supervisor_interfaces
 )
 
 install(TARGETS supervisor_execution_node

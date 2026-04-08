@@ -2,6 +2,8 @@
 
 #include <functional>
 
+#include "supervisor_execution/StringUtils.hpp"
+
 SupervisorExecutionNode::SupervisorExecutionNode()
 : Node("supervisor_execution_node")
 {
@@ -10,7 +12,7 @@ SupervisorExecutionNode::SupervisorExecutionNode()
   input_trigger_pub_ = this->create_publisher<std_msgs::msg::Empty>(
     "/input_trigger", 10);
 
-  execution_result_pub_ = this->create_publisher<std_msgs::msg::String>(
+  execution_result_pub_ = this->create_publisher<supervisor_interfaces::msg::TaskExecutionReport>(
     "/supervisor/supervisor_execution/result", 10);
 
   allow_next_instruction_sub_ = this->create_subscription<std_msgs::msg::Empty>(
@@ -41,16 +43,55 @@ void SupervisorExecutionNode::authorizeTaskCallback(
   const supervisor_executor_interfaces::srv::AuthorizeTask::Request::SharedPtr req,
   supervisor_executor_interfaces::srv::AuthorizeTask::Response::SharedPtr res)
 {
-  res->approved = true;
-  res->message = "ok";
-  processAuthorizeTask(*req);
+  const auto validation = processAuthorizeTask(*req);
+
+  res->approved = validation.approved;
+  if (validation.approved) {
+    res->message = "approved";
+  } else if (!validation.failure_reason.empty()) {
+    res->message = validation.failure_reason;
+  } else {
+    res->message = "rejected";
+  }
+
+  publishExecutionResult(*req, validation);
 }
 
-void SupervisorExecutionNode::processAuthorizeTask(
-  const supervisor_executor_interfaces::srv::AuthorizeTask::Request & req)
+ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
+  const supervisor_executor_interfaces::srv::AuthorizeTask::Request & req) const
 {
-  // Supervisor manager decides what to do next; execution only reports result.
-  publishExecutionResult(req.action, req.worker_result);
+  const std::string action =
+    supervisor_execution::string_utils::normalize(req.action);
+
+  if (action == "goto" || action == "go_to")
+  {
+    return goto_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if (action == "say")
+  {
+    return say_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if (action == "listen" || action == "listen_for")
+  {
+    return listen_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if (action == "check" || action == "wait_for")
+  {
+    return check_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "save")
+  {
+    return save_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  return makeFailure(
+    supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,
+    "Unsupported action '" + req.action + "'",
+    supervisor_interfaces::msg::TaskExecutionReport::REJECTED);
 }
 
 void SupervisorExecutionNode::publishInputTriggerOnce()
@@ -59,15 +100,29 @@ void SupervisorExecutionNode::publishInputTriggerOnce()
 }
 
 void SupervisorExecutionNode::publishExecutionResult(
-  const std::string & action,
-  const std::string & result)
+  const supervisor_executor_interfaces::srv::AuthorizeTask::Request & req,
+  const ActionValidationResult & validation)
 {
-  std_msgs::msg::String msg;
-  msg.data = action + ":" + result;
+  supervisor_interfaces::msg::TaskExecutionReport msg;
+  msg.action = req.action;
+  msg.argument = req.argument;
+  msg.worker_result = req.worker_result;
+  msg.context_message = req.context_message;
+  msg.approved = validation.approved;
+  msg.status = validation.status;
+  msg.failure_reason = validation.failure_reason;
+  msg.details = validation.details;
+
   execution_result_pub_->publish(msg);
+
   RCLCPP_INFO(
     this->get_logger(),
-    "execution result sent to manager: %s",
-    msg.data.c_str()
+    "execution result action='%s' arg='%s' worker='%s' approved=%s status=%u reason='%s'",
+    msg.action.c_str(),
+    msg.argument.c_str(),
+    msg.worker_result.c_str(),
+    msg.approved ? "true" : "false",
+    static_cast<unsigned int>(msg.status),
+    msg.failure_reason.c_str()
   );
 }
