@@ -9,18 +9,22 @@ SupervisorExecutionNode::SupervisorExecutionNode()
 {
   RCLCPP_INFO(this->get_logger(), "supervisor_execution_node: started");
 
+
+  // --- Publishers ---
   input_trigger_pub_ = this->create_publisher<std_msgs::msg::Empty>(
     "/input_trigger", 10);
 
   execution_result_pub_ = this->create_publisher<supervisor_interfaces::msg::TaskExecutionReport>(
     "/supervisor/supervisor_execution/result", 10);
 
+  // --- Subscribers ---
   allow_next_instruction_sub_ = this->create_subscription<std_msgs::msg::Empty>(
     "/supervisor/supervisor_manager/allow_next_instruction",
     rclcpp::QoS(10),
     std::bind(&SupervisorExecutionNode::allowNextInstructionCallback, this, std::placeholders::_1)
   );
 
+  // --- Services ---
   authorize_task_srv_ = this->create_service<supervisor_executor_interfaces::srv::AuthorizeTask>(
     "/supervisor/supervisor_executor/authorize",
     std::bind(
@@ -87,6 +91,37 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
   {
     return save_authorizer_.validate(req.argument, req.worker_result);
   }
+
+  if(action == "find")
+  {
+    return find_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "focus")
+  {
+    return focus_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "unfocus")
+  {
+    return unfocus_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "memorize_face")
+  {
+    return memorize_face_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "describe")
+  {
+    return describe_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "point")
+  {
+    return point_authorizer_.validate(req.argument, req.worker_result);
+  }
+
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,
