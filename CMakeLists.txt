@@ -20,6 +20,12 @@ add_executable(supervisor_execution_node
   src/Listen.cpp
   src/Check.cpp
   src/Save.cpp
+  src/Find.cpp
+  src/Focus.cpp
+  src/Unfocus.cpp
+  src/MemorizeFace.cpp
+  src/Describe.cpp
+  src/Point.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC
