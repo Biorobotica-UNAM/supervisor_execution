@@ -16,6 +16,12 @@
 #include "supervisor_execution/Listen.hpp"
 #include "supervisor_execution/Say.hpp"
 #include "supervisor_execution/Save.hpp"
+#include "supervisor_execution/Describe.hpp"
+#include "supervisor_execution/Point.hpp"
+#include "supervisor_execution/Find.hpp"
+#include "supervisor_execution/Focus.hpp"
+#include "supervisor_execution/Unfocus.hpp"
+#include "supervisor_execution/MemorizeFace.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -48,6 +54,12 @@ private:
   Listen listen_authorizer_;
   Check check_authorizer_;
   Save save_authorizer_;
+  Describe describe_authorizer_;
+  Point point_authorizer_;
+  Find find_authorizer_;
+  Focus focus_authorizer_;
+  Unfocus unfocus_authorizer_;
+  MemorizeFace memorize_face_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_
