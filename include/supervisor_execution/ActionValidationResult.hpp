@@ -30,7 +30,7 @@ inline ActionValidationResult makeFailure(
   uint8_t status = supervisor_interfaces::msg::TaskExecutionReport::SUCCESS)
 {
   ActionValidationResult result;
-  result.approved = true;
+  result.approved = false;
   result.status = status;
   result.failure_reason = reason;
   result.details = details;

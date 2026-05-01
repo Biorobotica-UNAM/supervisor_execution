@@ -12,12 +12,6 @@ ActionValidationResult Listen::validate(
     supervisor_execution::string_utils::normalize(worker_result);
 
   // Caso: timeout del recognizer
-  if (normalized_result == "timeout")
-  {
-    return makeTimeout("Listen timed out while waiting for input");
-  }
-
-  // Caso: no se detectó nada
   if (normalized_result.empty() ||
       normalized_result == "no_input" ||
       normalized_result == "nodata" ||
@@ -25,7 +19,21 @@ ActionValidationResult Listen::validate(
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_NO_INPUT,
-      "Listen returned NoData");
+      "Listen returned NoData",
+      supervisor_interfaces::msg::TaskExecutionReport::REJECTED);  // ← agregar REJECTED
+  }
+
+  // Caso: no se detectó nada
+  // supervisor_execution/src/Listen.cpp
+  if (normalized_result.empty() ||
+      normalized_result == "no_input" ||
+      normalized_result == "nodata" ||
+      normalized_result == "no_data")
+  {
+    return makeFailure(
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_NO_INPUT,
+      "Listen returned NoData",
+      supervisor_interfaces::msg::TaskExecutionReport::REJECTED);  // ← agregar REJECTED
   }
 
   // Caso válido: cualquier cosa reconocida
