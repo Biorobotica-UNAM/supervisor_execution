@@ -33,6 +33,11 @@ ActionValidationResult Find::validate(
       "Find failed for argument '" + argument + "'");
   }
 
+  if (normalized_result.rfind("found:", 0) == 0)
+  {
+      return makeSuccess("Find completed for argument '" + argument + "'");
+  }
+
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
     "Find returned unsupported worker_result='" + worker_result + "'");

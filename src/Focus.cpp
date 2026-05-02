@@ -32,6 +32,11 @@ ActionValidationResult Focus::validate(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
       "Focus failed for argument '" + argument + "'");
   }
+  
+  if (normalized_result.rfind("focus:", 0) == 0)
+  {
+      return makeSuccess("Focus completed for argument '" + argument + "'");
+  }
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,

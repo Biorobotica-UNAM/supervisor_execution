@@ -25,6 +25,11 @@ ActionValidationResult Unfocus::validate(
       "Unfocus failed for argument '" + argument + "'");
   }
 
+  if (normalized_result.rfind("focus:", 0) == 0)
+  {
+      return makeSuccess("Unfocus completed for argument '" + argument + "'");
+  }
+
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
     "Unfocus returned unsupported worker_result='" + worker_result + "'");
