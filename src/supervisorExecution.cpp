@@ -92,7 +92,7 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return save_authorizer_.validate(req.argument, req.worker_result);
   }
 
-  if(action == "find")
+  if(action == "find" || action == "find_object" || action == "find_seat" || action == "find_waving" || action == "find_person")
   {
     return find_authorizer_.validate(req.argument, req.worker_result);
   }
