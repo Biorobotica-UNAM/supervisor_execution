@@ -122,6 +122,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return point_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "saveloc")
+  {
+    return saveloc_authorizer_.validate(req.argument, req.worker_result);
+  }
+
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,

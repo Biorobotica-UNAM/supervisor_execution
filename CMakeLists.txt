@@ -26,6 +26,7 @@ add_executable(supervisor_execution_node
   src/MemorizeFace.cpp
   src/Describe.cpp
   src/Point.cpp
+  src/SaveLoc.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC

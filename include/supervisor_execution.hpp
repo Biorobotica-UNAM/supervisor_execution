@@ -22,6 +22,7 @@
 #include "supervisor_execution/Focus.hpp"
 #include "supervisor_execution/Unfocus.hpp"
 #include "supervisor_execution/MemorizeFace.hpp"
+#include "supervisor_execution/SaveLoc.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -60,6 +61,7 @@ private:
   Focus focus_authorizer_;
   Unfocus unfocus_authorizer_;
   MemorizeFace memorize_face_authorizer_;
+  SaveLoc saveloc_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_
