@@ -27,6 +27,7 @@ add_executable(supervisor_execution_node
   src/Describe.cpp
   src/Point.cpp
   src/SaveLoc.cpp
+  src/Align.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC
