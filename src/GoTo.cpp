@@ -28,7 +28,8 @@ ActionValidationResult GoTo::validate(
     return makeSuccess("GoTo reached destination '" + argument + "'");
   }
 
-  if (normalized_result == "timeout")
+  if (normalized_result == "timeout" ||
+      supervisor_execution::string_utils::startsWith(normalized_result, "navigation_timeout"))
   {
     return makeTimeout("GoTo timed out while moving to '" + argument + "'");
   }
