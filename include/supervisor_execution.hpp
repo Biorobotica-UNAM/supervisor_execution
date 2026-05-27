@@ -24,6 +24,7 @@
 #include "supervisor_execution/MemorizeFace.hpp"
 #include "supervisor_execution/SaveLoc.hpp"
 #include "supervisor_execution/Align.hpp"
+#include "supervisor_execution/Take.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -54,19 +55,20 @@ private:
   // Reintenta el pulso /input_trigger cuando executor_manager arranca tarde.
   rclcpp::TimerBase::SharedPtr input_trigger_retry_timer_;
 
-  GoTo goto_authorizer_;
-  Say say_authorizer_;
-  Listen listen_authorizer_;
-  Check check_authorizer_;
-  Save save_authorizer_;
-  Describe describe_authorizer_;
-  Point point_authorizer_;
-  Find find_authorizer_;
-  Focus focus_authorizer_;
-  Unfocus unfocus_authorizer_;
-  MemorizeFace memorize_face_authorizer_;
-  SaveLoc saveloc_authorizer_;
-  Align align_authorizer_;
+  GoTo          goto_authorizer_;
+  Say           say_authorizer_;
+  Listen        listen_authorizer_;
+  Check         check_authorizer_;
+  Save          save_authorizer_;
+  Describe      describe_authorizer_;
+  Point         point_authorizer_;
+  Find          find_authorizer_;
+  Focus         focus_authorizer_;
+  Unfocus       unfocus_authorizer_;
+  MemorizeFace  memorize_face_authorizer_;
+  SaveLoc       saveloc_authorizer_;
+  Align         align_authorizer_;
+  Take          take_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_
