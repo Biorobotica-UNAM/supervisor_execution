@@ -41,6 +41,7 @@ private:
     const supervisor_executor_interfaces::srv::AuthorizeTask::Request & req) const;
 
   void publishInputTriggerOnce();
+  void scheduleInputTriggerRetry();
   void publishExecutionResult(
     const supervisor_executor_interfaces::srv::AuthorizeTask::Request & req,
     const ActionValidationResult & validation);
@@ -50,6 +51,8 @@ private:
 
   rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr allow_next_instruction_sub_;
   rclcpp::Service<supervisor_executor_interfaces::srv::AuthorizeTask>::SharedPtr authorize_task_srv_;
+  // Reintenta el pulso /input_trigger cuando executor_manager arranca tarde.
+  rclcpp::TimerBase::SharedPtr input_trigger_retry_timer_;
 
   GoTo goto_authorizer_;
   Say say_authorizer_;

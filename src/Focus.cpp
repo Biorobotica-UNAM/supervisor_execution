@@ -21,16 +21,20 @@ ActionValidationResult Focus::validate(
     return makeTimeout("Focus timed out for argument '" + argument + "'");
   }
 
-  if (normalized_result == "success")
+  // executor_tools::Focus reporta "focus_updated" cuando /vision/focus acepta
+  // el cambio; para el supervisor eso equivale a exito.
+  if (normalized_result == "success" || normalized_result == "focus_updated")
   {
     return makeSuccess("Focus completed for argument '" + argument + "'");
   }
 
-  if (normalized_result == "failure")
+  // "focus_failed" es el fallo real del worker, distinto de malformed_result.
+  if (normalized_result == "failure" || normalized_result == "focus_failed")
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
-      "Focus failed for argument '" + argument + "'");
+      "Focus failed for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
   
   if (normalized_result.rfind("focus:", 0) == 0)
@@ -40,5 +44,6 @@ ActionValidationResult Focus::validate(
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-    "Focus returned unsupported worker_result='" + worker_result + "'");
+    "Focus returned unsupported worker_result='" + worker_result + "'",
+    supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
 }

@@ -21,7 +21,19 @@ ActionValidationResult GoTo::validate(
     return makeSuccess("GoTo reached destination '" + argument + "'");
   }
 
+  // executor_tools::GoTo devuelve detalles como "arrived_at: cocina: ...";
+  // el validador debe aceptarlos como exito, no como resultado mal formado.
+  if (supervisor_execution::string_utils::startsWith(normalized_result, "arrived_at:"))
+  {
+    return makeSuccess("GoTo reached destination '" + argument + "'");
+  }
+
   if (normalized_result == "timeout")
+  {
+    return makeTimeout("GoTo timed out while moving to '" + argument + "'");
+  }
+
+  if (normalized_result.find("timeout") != std::string::npos)
   {
     return makeTimeout("GoTo timed out while moving to '" + argument + "'");
   }
@@ -30,10 +42,21 @@ ActionValidationResult GoTo::validate(
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_NAVIGATION_FAILED,
-      "GoTo failed while moving to '" + argument + "'");
+      "GoTo failed while moving to '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
+  }
+
+  // Los errores detallados de navegacion tambien llegan con prefijo del worker.
+  if (supervisor_execution::string_utils::startsWith(normalized_result, "navigation_failed:"))
+  {
+    return makeFailure(
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_NAVIGATION_FAILED,
+      "GoTo failed while moving to '" + argument + "': " + worker_result,
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-    "GoTo returned unsupported worker_result='" + worker_result + "'");
+    "GoTo returned unsupported worker_result='" + worker_result + "'",
+    supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
 }

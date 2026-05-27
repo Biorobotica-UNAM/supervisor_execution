@@ -1,8 +1,11 @@
 #include "supervisor_execution.hpp"
 
+#include <chrono>
 #include <functional>
 
 #include "supervisor_execution/StringUtils.hpp"
+
+using namespace std::chrono_literals;
 
 SupervisorExecutionNode::SupervisorExecutionNode()
 : Node("supervisor_execution_node")
@@ -141,7 +144,49 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
 
 void SupervisorExecutionNode::publishInputTriggerOnce()
 {
+  // /input_trigger es un pulso; si executor_manager aun no esta conectado,
+  // guardamos el intento y lo reemitimos cuando aparezca el subscriber.
+  if (input_trigger_pub_->get_subscription_count() == 0)
+  {
+    RCLCPP_WARN(
+      this->get_logger(),
+      "input_trigger not sent: waiting for executor_manager subscriber");
+    scheduleInputTriggerRetry();
+    return;
+  }
+
   input_trigger_pub_->publish(std_msgs::msg::Empty{});
+}
+
+void SupervisorExecutionNode::scheduleInputTriggerRetry()
+{
+  // Mantiene un solo timer de reintento para no acumular disparos duplicados.
+  if (input_trigger_retry_timer_) {
+    return;
+  }
+
+  input_trigger_retry_timer_ = this->create_wall_timer(
+    200ms,
+    [this]()
+    {
+      if (input_trigger_pub_->get_subscription_count() == 0)
+      {
+        RCLCPP_WARN_THROTTLE(
+          this->get_logger(), *this->get_clock(), 2000,
+          "Still waiting for executor_manager subscriber on /input_trigger");
+        return;
+      }
+
+      input_trigger_pub_->publish(std_msgs::msg::Empty{});
+      RCLCPP_INFO(
+        this->get_logger(),
+        "input_trigger sent after executor_manager subscriber appeared");
+
+      if (input_trigger_retry_timer_) {
+        input_trigger_retry_timer_->cancel();
+        input_trigger_retry_timer_.reset();
+      }
+    });
 }
 
 void SupervisorExecutionNode::publishExecutionResult(
