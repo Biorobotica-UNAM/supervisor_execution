@@ -46,7 +46,7 @@ ActionValidationResult Take::validate(
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-      "Take failed closing gripper")
+      "Take failed closing gripper");
   }
 
   // if (normalized_result.rfind("found:", 0) == 0)
