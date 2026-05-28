@@ -11,29 +11,27 @@ ActionValidationResult Listen::validate(
   const auto normalized_result =
     supervisor_execution::string_utils::normalize(worker_result);
 
-  // Caso: timeout del recognizer
+  // Casos sin entrada o fallos reales del worker Listen.
   if (normalized_result.empty() ||
       normalized_result == "no_input" ||
       normalized_result == "nodata" ||
-      normalized_result == "no_data")
+      normalized_result == "no_data" ||
+      normalized_result == "listen_failed")
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_NO_INPUT,
-      "Listen returned NoData",
-      supervisor_interfaces::msg::TaskExecutionReport::REJECTED);  // ← agregar REJECTED
+      "Listen returned no usable speech",
+      supervisor_interfaces::msg::TaskExecutionReport::REJECTED);
   }
 
-  // Caso: no se detectó nada
-  // supervisor_execution/src/Listen.cpp
-  if (normalized_result.empty() ||
-      normalized_result == "no_input" ||
-      normalized_result == "nodata" ||
-      normalized_result == "no_data")
+  if (supervisor_execution::string_utils::startsWith(normalized_result, "invalid_argument:") ||
+      supervisor_execution::string_utils::startsWith(normalized_result, "entity_not_found:") ||
+      normalized_result == "update_world_state_failed")
   {
     return makeFailure(
-      supervisor_interfaces::msg::TaskExecutionReport::REASON_NO_INPUT,
-      "Listen returned NoData",
-      supervisor_interfaces::msg::TaskExecutionReport::REJECTED);  // ← agregar REJECTED
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
+      "Listen failed with worker_result='" + worker_result + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
   // Caso válido: cualquier cosa reconocida
