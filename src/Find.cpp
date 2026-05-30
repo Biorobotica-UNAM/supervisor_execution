@@ -21,24 +21,37 @@ ActionValidationResult Find::validate(
     return makeTimeout("Find timed out for argument '" + argument + "'");
   }
 
-  if (normalized_result == "success" || normalized_result == "found")
+  const auto starts_with = [](const std::string & value, const std::string & prefix) {
+    return value.rfind(prefix, 0U) == 0U;
+  };
+
+  const auto ends_with = [](const std::string & value, const std::string & suffix) {
+    return value.size() >= suffix.size() &&
+      value.compare(value.size() - suffix.size(), suffix.size(), suffix) == 0;
+  };
+
+  if (normalized_result == "failure" ||
+      normalized_result == "not_found" ||
+      starts_with(normalized_result, "person_not_found:") ||
+      ends_with(normalized_result, "_not_found"))
+  {
+    return makeFailure(
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
+      "Find failed for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
+  }
+
+  if (normalized_result == "success" ||
+      normalized_result == "found" ||
+      starts_with(normalized_result, "found:") ||
+      starts_with(normalized_result, "person_found:") ||
+      ends_with(normalized_result, "_found"))
   {
     return makeSuccess("Find completed for argument '" + argument + "'");
   }
 
-  if (normalized_result == "failure" || normalized_result == "not_found")
-  {
-    return makeFailure(
-      supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
-      "Find failed for argument '" + argument + "'");
-  }
-
-  if (normalized_result.rfind("found:", 0) == 0)
-  {
-      return makeSuccess("Find completed for argument '" + argument + "'");
-  }
-
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-    "Find returned unsupported worker_result='" + worker_result + "'");
+    "Find returned unsupported worker_result='" + worker_result + "'",
+    supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
 }

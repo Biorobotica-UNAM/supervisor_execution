@@ -21,19 +21,29 @@ ActionValidationResult Point::validate(
     return makeTimeout("Point timed out for argument '" + argument + "'");
   }
 
-  if (normalized_result == "success")
+  if (normalized_result == "success" ||
+      normalized_result == "pointing_enable" ||
+      normalized_result == "pointing_enabled" ||
+      normalized_result == "pointing_disable" ||
+      normalized_result == "pointing_disabled")
   {
     return makeSuccess("Point completed for argument '" + argument + "'");
   }
 
-  if (normalized_result == "failure")
+  if (normalized_result == "failure" ||
+      normalized_result == "arm_failed" ||
+      normalized_result == "arm_failed_during_pointing" ||
+      normalized_result == "arm_failed_during_reset" ||
+      normalized_result.rfind("unknown_argument:", 0U) == 0U)
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
-      "Point failed for argument '" + argument + "'");
+      "Point failed for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-    "Point returned unsupported worker_result='" + worker_result + "'");
+    "Point returned unsupported worker_result='" + worker_result + "'",
+    supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
 }
