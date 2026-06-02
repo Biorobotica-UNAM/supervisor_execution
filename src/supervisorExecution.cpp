@@ -75,6 +75,16 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return goto_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "goto_mapless")
+  {
+    return goto_mapless_authorizer_.validate(req.argument, req.worker_result);
+  }
+    
+  if(action == "saveloc")
+  {
+    return saveloc_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if (action == "say")
   {
     return say_authorizer_.validate(req.argument, req.worker_result);
@@ -123,11 +133,6 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
   if(action == "point")
   {
     return point_authorizer_.validate(req.argument, req.worker_result);
-  }
-
-  if(action == "saveloc")
-  {
-    return saveloc_authorizer_.validate(req.argument, req.worker_result);
   }
 
   if(action == "align")

@@ -1,5 +1,4 @@
 #include "supervisor_execution/SaveLoc.hpp"
-
 #include "supervisor_execution/StringUtils.hpp"
 
 ActionValidationResult SaveLoc::validate(
@@ -7,7 +6,7 @@ ActionValidationResult SaveLoc::validate(
   const std::string & worker_result) const
 {
   const auto normalized_argument = supervisor_execution::string_utils::normalize(argument);
-  const auto normalized_result = supervisor_execution::string_utils::normalize(worker_result);
+  const auto normalized_result   = supervisor_execution::string_utils::normalize(worker_result);
 
   if (normalized_argument.empty())
   {
@@ -16,28 +15,28 @@ ActionValidationResult SaveLoc::validate(
       "SaveLoc requires a non-empty action argument");
   }
 
-  if (normalized_result == "timeout")
+  // Éxito: el worker devuelve "location_saved: <nombre>"
+  if (normalized_result == "success" ||
+      supervisor_execution::string_utils::startsWith(normalized_result, "location_saved:"))
   {
-    return makeTimeout("Find timed out for argument '" + argument + "'");
+    return makeSuccess("SaveLoc saved '" + argument + "'");
   }
 
-  if (normalized_result == "success" || normalized_result == "saved")
-  {
-    return makeSuccess("Find completed for argument '" + argument + "'");
-  }
-
-  if (normalized_result == "failure" || normalized_result == "not_saved")
+  // Fallo controlado
+  if (normalized_result == "failure" ||
+      supervisor_execution::string_utils::startsWith(normalized_result, "save_failed:"))
   {
     return makeFailure(
-      supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
-      "Find failed for argument '" + argument + "'");
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_NAVIGATION_FAILED,
+      "SaveLoc failed for '" + argument + "'");
   }
 
-  if (normalized_result.rfind("saved:", 0) == 0)
+  if (normalized_result == "timeout")
   {
-      return makeSuccess("SaveLoc completed for argument '" + argument + "'");
+    return makeTimeout("SaveLoc timed out for '" + argument + "'");
   }
 
+  // Cualquier otro resultado se considera mal formado
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
     "SaveLoc returned unsupported worker_result='" + worker_result + "'");

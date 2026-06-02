@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-
 #include "supervisor_execution/ActionValidationResult.hpp"
 
 class SaveLoc

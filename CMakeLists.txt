@@ -16,6 +16,8 @@ add_executable(supervisor_execution_node
   src/supervisor_execution_node.cpp
   src/supervisorExecution.cpp
   src/GoTo.cpp
+  src/GoToMapless.cpp 
+  src/SaveLoc.cpp  
   src/Say.cpp
   src/Listen.cpp
   src/Check.cpp
@@ -26,7 +28,6 @@ add_executable(supervisor_execution_node
   src/MemorizeFace.cpp
   src/Describe.cpp
   src/Point.cpp
-  src/SaveLoc.cpp
   src/Align.cpp
   src/Take.cpp
 )

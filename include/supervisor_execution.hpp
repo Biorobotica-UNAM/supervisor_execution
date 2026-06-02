@@ -25,6 +25,8 @@
 #include "supervisor_execution/SaveLoc.hpp"
 #include "supervisor_execution/Align.hpp"
 #include "supervisor_execution/Take.hpp"
+#include "supervisor_execution/GoToMapless.hpp"
+#include "supervisor_execution/SaveLoc.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -56,6 +58,8 @@ private:
   rclcpp::TimerBase::SharedPtr input_trigger_retry_timer_;
 
   GoTo          goto_authorizer_;
+  GoToMapless   goto_mapless_authorizer_;  
+  SaveLoc       saveloc_authorizer_;
   Say           say_authorizer_;
   Listen        listen_authorizer_;
   Check         check_authorizer_;
@@ -66,7 +70,6 @@ private:
   Focus         focus_authorizer_;
   Unfocus       unfocus_authorizer_;
   MemorizeFace  memorize_face_authorizer_;
-  SaveLoc       saveloc_authorizer_;
   Align         align_authorizer_;
   Take          take_authorizer_;
 };
