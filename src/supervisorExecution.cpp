@@ -140,6 +140,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return take_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "analyze" || action == "analyze_objects")
+  {
+    return analyze_authorizer_.validate(req.argument, req.worker_result);
+  }
+
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,
