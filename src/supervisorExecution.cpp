@@ -105,6 +105,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return focus_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "follow")
+  {
+    return follow_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "unfocus")
   {
     return unfocus_authorizer_.validate(req.argument, req.worker_result);

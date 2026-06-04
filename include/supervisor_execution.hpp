@@ -20,6 +20,7 @@
 #include "supervisor_execution/Point.hpp"
 #include "supervisor_execution/Find.hpp"
 #include "supervisor_execution/Focus.hpp"
+#include "supervisor_execution/Follow.hpp"
 #include "supervisor_execution/Unfocus.hpp"
 #include "supervisor_execution/MemorizeFace.hpp"
 #include "supervisor_execution/SaveLoc.hpp"
@@ -65,6 +66,7 @@ private:
   Point         point_authorizer_;
   Find          find_authorizer_;
   Focus         focus_authorizer_;
+  Follow        follow_authorizer_;
   Unfocus       unfocus_authorizer_;
   MemorizeFace  memorize_face_authorizer_;
   SaveLoc       saveloc_authorizer_;

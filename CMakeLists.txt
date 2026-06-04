@@ -22,6 +22,7 @@ add_executable(supervisor_execution_node
   src/Save.cpp
   src/Find.cpp
   src/Focus.cpp
+  src/Follow.cpp
   src/Unfocus.cpp
   src/MemorizeFace.cpp
   src/Describe.cpp
