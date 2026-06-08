@@ -45,10 +45,10 @@ ActionValidationResult Find::validate(
       normalized_result == "found" ||
       starts_with(normalized_result, "found:") ||
       starts_with(normalized_result, "person_found:") ||
-      ends_with(normalized_result, "_found"))
-      normalized_result.find("_waving_") != std::string::npos;
-      normalized_result.find("_raising_") != std::string::npos;
-      normalized_result.find("_pointing_") != std::string::npos;
+      ends_with(normalized_result, "_found") ||
+      normalized_result.find("_waving_") != std::string::npos ||
+      normalized_result.find("_raising_") != std::string::npos ||
+      normalized_result.find("_pointing_") != std::string::npos)
   {
     return makeSuccess("Find completed for argument '" + argument + "'");
   }
