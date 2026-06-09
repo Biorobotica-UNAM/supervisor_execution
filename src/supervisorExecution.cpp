@@ -105,6 +105,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return focus_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "follow")
+  {
+    return follow_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "unfocus")
   {
     return unfocus_authorizer_.validate(req.argument, req.worker_result);
@@ -130,6 +135,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return saveloc_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "approach")
+  {
+    return approach_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "align")
   {
     return align_authorizer_.validate(req.argument, req.worker_result);
@@ -138,6 +148,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
   if(action == "take")
   {
     return take_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "analyze" || action == "analyze_objects")
+  {
+    return analyze_authorizer_.validate(req.argument, req.worker_result);
   }
 
 
