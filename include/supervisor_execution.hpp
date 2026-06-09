@@ -24,6 +24,7 @@
 #include "supervisor_execution/Unfocus.hpp"
 #include "supervisor_execution/MemorizeFace.hpp"
 #include "supervisor_execution/SaveLoc.hpp"
+#include "supervisor_execution/Approach.hpp"
 #include "supervisor_execution/Align.hpp"
 #include "supervisor_execution/Take.hpp"
 #include "supervisor_execution/Analyze.hpp"
@@ -70,6 +71,7 @@ private:
   Unfocus       unfocus_authorizer_;
   MemorizeFace  memorize_face_authorizer_;
   SaveLoc       saveloc_authorizer_;
+  Approach      approach_authorizer_;
   Align         align_authorizer_;
   Take          take_authorizer_;
   Analyze       analyze_authorizer_;

@@ -135,6 +135,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return saveloc_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "approach")
+  {
+    return approach_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "align")
   {
     return align_authorizer_.validate(req.argument, req.worker_result);
