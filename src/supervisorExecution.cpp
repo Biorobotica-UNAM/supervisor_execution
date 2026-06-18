@@ -130,7 +130,7 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return point_authorizer_.validate(req.argument, req.worker_result);
   }
 
-  if(action == "saveloc")
+  if(action == "saveloc" || action == "save_loc")
   {
     return saveloc_authorizer_.validate(req.argument, req.worker_result);
   }
