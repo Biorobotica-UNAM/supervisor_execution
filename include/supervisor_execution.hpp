@@ -27,6 +27,7 @@
 #include "supervisor_execution/Align.hpp"
 #include "supervisor_execution/Take.hpp"
 #include "supervisor_execution/Analyze.hpp"
+#include "supervisor_execution/Approach.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -73,6 +74,7 @@ private:
   Align         align_authorizer_;
   Take          take_authorizer_;
   Analyze       analyze_authorizer_;
+  Approach      approach_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_

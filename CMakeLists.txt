@@ -31,6 +31,7 @@ add_executable(supervisor_execution_node
   src/Align.cpp
   src/Take.cpp
   src/Analyze.cpp
+  src/Approach.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC

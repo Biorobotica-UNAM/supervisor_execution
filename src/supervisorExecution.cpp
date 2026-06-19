@@ -145,6 +145,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return take_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "approach")
+  {
+    return approach_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "analyze" || action == "analyze_objects")
   {
     return analyze_authorizer_.validate(req.argument, req.worker_result);
