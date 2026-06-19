@@ -19,8 +19,12 @@ ActionValidationResult Approach::validate(
 
   if (normalized_result == "success" ||
       normalized_result == "arrived_by_tf_fallback" ||
+      normalized_result == "partial_goal_already_close" ||
+      normalized_result == "partial_arrived_by_tf_fallback" ||
       supervisor_execution::string_utils::startsWith(
-        normalized_result, "navigation_status=succeeded"))
+        normalized_result, "navigation_status=succeeded") ||
+      supervisor_execution::string_utils::startsWith(
+        normalized_result, "partial_navigation_status=succeeded"))
   {
     return makeSuccess("Approach completed for argument '" + argument + "'");
   }
