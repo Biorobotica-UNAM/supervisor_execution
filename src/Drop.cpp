@@ -40,6 +40,14 @@ ActionValidationResult Drop::validate(
       supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
+  if (normalized_result == "pose_out_of_range")
+  {
+    return makeFailure(
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
+      "Drop target is outside manipulation range for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
+  }
+
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
     "Drop returned unsupported worker_result='" + worker_result + "'",
