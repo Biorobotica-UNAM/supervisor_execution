@@ -8,6 +8,10 @@ ActionValidationResult Approach::validate(
 {
   const auto normalized_argument = supervisor_execution::string_utils::normalize(argument);
   const auto normalized_result = supervisor_execution::string_utils::normalize(worker_result);
+  const auto matches_result_token = [&normalized_result](const std::string & token) {
+    return normalized_result == token ||
+           supervisor_execution::string_utils::startsWith(normalized_result, token + ";");
+  };
 
   if (normalized_argument.empty())
   {
@@ -17,10 +21,10 @@ ActionValidationResult Approach::validate(
       supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
-  if (normalized_result == "success" ||
-      normalized_result == "arrived_by_tf_fallback" ||
-      normalized_result == "partial_goal_already_close" ||
-      normalized_result == "partial_arrived_by_tf_fallback" ||
+  if (matches_result_token("success") ||
+      matches_result_token("arrived_by_tf_fallback") ||
+      matches_result_token("partial_goal_already_close") ||
+      matches_result_token("partial_arrived_by_tf_fallback") ||
       supervisor_execution::string_utils::startsWith(
         normalized_result, "navigation_status=succeeded") ||
       supervisor_execution::string_utils::startsWith(
