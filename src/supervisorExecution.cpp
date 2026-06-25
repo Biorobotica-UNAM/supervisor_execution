@@ -160,6 +160,10 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return analyze_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if (action == "fold")
+  {
+    return fold_authorizer_.validate(req.argument, req.worker_result);
+  }
 
   return makeFailure(
     supervisor_interfaces::msg::TaskExecutionReport::REASON_UNKNOWN_ACTION,

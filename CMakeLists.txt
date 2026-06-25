@@ -33,6 +33,7 @@ add_executable(supervisor_execution_node
   src/Drop.cpp
   src/Analyze.cpp
   src/Approach.cpp
+  src/Fold.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC

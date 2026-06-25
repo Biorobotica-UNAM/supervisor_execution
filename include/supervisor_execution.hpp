@@ -29,6 +29,7 @@
 #include "supervisor_execution/Drop.hpp"
 #include "supervisor_execution/Analyze.hpp"
 #include "supervisor_execution/Approach.hpp"
+#include "supervisor_execution/Fold.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -77,6 +78,7 @@ private:
   Drop          drop_authorizer_;
   Analyze       analyze_authorizer_;
   Approach      approach_authorizer_;
+  Fold          fold_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_
