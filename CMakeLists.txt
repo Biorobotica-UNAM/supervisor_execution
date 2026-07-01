@@ -31,6 +31,7 @@ add_executable(supervisor_execution_node
   src/SaveLoc.cpp
   src/Align.cpp
   src/Take.cpp
+  src/VerifyTake.cpp
   src/Drop.cpp
   src/Analyze.cpp
   src/Approach.cpp

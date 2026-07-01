@@ -26,6 +26,7 @@
 #include "supervisor_execution/SaveLoc.hpp"
 #include "supervisor_execution/Align.hpp"
 #include "supervisor_execution/Take.hpp"
+#include "supervisor_execution/VerifyTake.hpp"
 #include "supervisor_execution/Fold.hpp"
 #include "supervisor_execution/Drop.hpp"
 #include "supervisor_execution/Analyze.hpp"
@@ -75,6 +76,7 @@ private:
   SaveLoc       saveloc_authorizer_;
   Align         align_authorizer_;
   Take          take_authorizer_;
+  VerifyTake    verify_take_authorizer_;
   Drop          drop_authorizer_;
   Fold          fold_authorizer_;
   Analyze       analyze_authorizer_;

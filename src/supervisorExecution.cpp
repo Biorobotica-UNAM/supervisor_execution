@@ -150,6 +150,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return take_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "verify_take")
+  {
+    return verify_take_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "drop")
   {
     return drop_authorizer_.validate(req.argument, req.worker_result);
