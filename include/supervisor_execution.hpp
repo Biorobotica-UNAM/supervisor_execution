@@ -20,11 +20,17 @@
 #include "supervisor_execution/Point.hpp"
 #include "supervisor_execution/Find.hpp"
 #include "supervisor_execution/Focus.hpp"
+#include "supervisor_execution/Follow.hpp"
 #include "supervisor_execution/Unfocus.hpp"
 #include "supervisor_execution/MemorizeFace.hpp"
 #include "supervisor_execution/SaveLoc.hpp"
 #include "supervisor_execution/Align.hpp"
 #include "supervisor_execution/Take.hpp"
+#include "supervisor_execution/VerifyTake.hpp"
+#include "supervisor_execution/Fold.hpp"
+#include "supervisor_execution/Drop.hpp"
+#include "supervisor_execution/Analyze.hpp"
+#include "supervisor_execution/Approach.hpp"
 
 class SupervisorExecutionNode : public rclcpp::Node
 {
@@ -64,11 +70,17 @@ private:
   Point         point_authorizer_;
   Find          find_authorizer_;
   Focus         focus_authorizer_;
+  Follow        follow_authorizer_;
   Unfocus       unfocus_authorizer_;
   MemorizeFace  memorize_face_authorizer_;
   SaveLoc       saveloc_authorizer_;
   Align         align_authorizer_;
   Take          take_authorizer_;
+  VerifyTake    verify_take_authorizer_;
+  Drop          drop_authorizer_;
+  Fold          fold_authorizer_;
+  Analyze       analyze_authorizer_;
+  Approach      approach_authorizer_;
 };
 
 #endif  // SUPERVISOR_EXECUTION_HPP_

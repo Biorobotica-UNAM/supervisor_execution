@@ -22,6 +22,8 @@ add_executable(supervisor_execution_node
   src/Save.cpp
   src/Find.cpp
   src/Focus.cpp
+  src/Fold.cpp
+  src/Follow.cpp
   src/Unfocus.cpp
   src/MemorizeFace.cpp
   src/Describe.cpp
@@ -29,6 +31,10 @@ add_executable(supervisor_execution_node
   src/SaveLoc.cpp
   src/Align.cpp
   src/Take.cpp
+  src/VerifyTake.cpp
+  src/Drop.cpp
+  src/Analyze.cpp
+  src/Approach.cpp
 )
 
 target_include_directories(supervisor_execution_node PUBLIC

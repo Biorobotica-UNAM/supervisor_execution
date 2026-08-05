@@ -105,6 +105,16 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return focus_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "follow")
+  {
+    return follow_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "fold")
+  {
+    return fold_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "unfocus")
   {
     return unfocus_authorizer_.validate(req.argument, req.worker_result);
@@ -125,7 +135,7 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return point_authorizer_.validate(req.argument, req.worker_result);
   }
 
-  if(action == "saveloc")
+  if(action == "saveloc" || action == "save_loc")
   {
     return saveloc_authorizer_.validate(req.argument, req.worker_result);
   }
@@ -138,6 +148,26 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
   if(action == "take")
   {
     return take_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "verify_take")
+  {
+    return verify_take_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "drop")
+  {
+    return drop_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "approach" || action == "approach_partial")
+  {
+    return approach_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "analyze" || action == "analyze_objects" || action == "analyze_object")
+  {
+    return analyze_authorizer_.validate(req.argument, req.worker_result);
   }
 
 

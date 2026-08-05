@@ -42,6 +42,14 @@ ActionValidationResult Take::validate(
       "Take failed parsing json pose for argument '" + argument + "'");
   }
 
+  if (normalized_result == "pose_out_of_range")
+  {
+    return makeFailure(
+      supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
+      "Take target is outside manipulation range for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
+  }
+
   if (normalized_result == "failure" || normalized_result == "gripper_close_failed")
   {
     return makeFailure(
