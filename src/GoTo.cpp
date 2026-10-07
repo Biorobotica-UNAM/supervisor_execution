@@ -16,6 +16,16 @@ ActionValidationResult GoTo::validate(
       "GoTo requires a non-empty destination argument");
   }
 
+  if (normalized_result.find("bumper") != std::string::npos) {
+    return makeFailure("bumper_triggered", worker_result,
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
+  }
+  if (normalized_result.find("location") != std::string::npos &&
+      normalized_result.find("not found") != std::string::npos) {
+    return makeFailure("location_not_found", worker_result,
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
+  }
+
   if (normalized_result == "success")
   {
     return makeSuccess("GoTo reached destination '" + argument + "'");

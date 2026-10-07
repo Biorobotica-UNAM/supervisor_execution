@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "supervisor_execution/StringUtils.hpp"
+#include "supervisor_execution/AdditionalActions.hpp"
 
 using namespace std::chrono_literals;
 
@@ -90,6 +91,11 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return check_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if (action == "give" || action == "receive" || action == "find_space" ||
+      action == "analyze_person") {
+    return validateAdditionalAction(action, req.argument, req.worker_result);
+  }
+
   if(action == "save")
   {
     return save_authorizer_.validate(req.argument, req.worker_result);
@@ -97,7 +103,14 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
 
   if(action == "find" || action == "find_object" || action == "find_seat" || action == "find_pose" || action == "find_person")
   {
-    return find_authorizer_.validate(req.argument, req.worker_result);
+    auto result = find_authorizer_.validate(req.argument, req.worker_result);
+    const auto worker = supervisor_execution::string_utils::normalize(req.worker_result);
+    if (action == "find_object" && !result.approved &&
+        (supervisor_execution::string_utils::startsWith(worker, "object_not_found:") ||
+         (worker.size() >= 10 && worker.compare(worker.size() - 10, 10, "_not_found") == 0))) {
+      result.failure_reason = "object_not_found";
+    }
+    return result;
   }
 
   if(action == "focus")

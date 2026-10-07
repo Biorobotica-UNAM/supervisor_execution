@@ -13,6 +13,7 @@
   <depend>supervisor_executor_interfaces</depend>
   <depend>supervisor_interfaces</depend>
 
+  <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
