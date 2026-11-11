@@ -33,6 +33,8 @@ add_executable(supervisor_execution_node
   src/Take.cpp
   src/VerifyTake.cpp
   src/Drop.cpp
+  src/Give.cpp
+  src/Receive.cpp
   src/Analyze.cpp
   src/Approach.cpp
 )

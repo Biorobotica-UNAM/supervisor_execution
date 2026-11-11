@@ -95,7 +95,7 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return save_authorizer_.validate(req.argument, req.worker_result);
   }
 
-  if(action == "find" || action == "find_object" || action == "find_seat" || action == "find_pose" || action == "find_person")
+  if(action == "find" || action == "find_object" || action == "find_seat" || action == "find_space" || action == "find_pose" || action == "find_person")
   {
     return find_authorizer_.validate(req.argument, req.worker_result);
   }
@@ -160,12 +160,22 @@ ActionValidationResult SupervisorExecutionNode::processAuthorizeTask(
     return drop_authorizer_.validate(req.argument, req.worker_result);
   }
 
+  if(action == "give")
+  {
+    return give_authorizer_.validate(req.argument, req.worker_result);
+  }
+
+  if(action == "receive")
+  {
+    return receive_authorizer_.validate(req.argument, req.worker_result);
+  }
+
   if(action == "approach" || action == "approach_partial")
   {
     return approach_authorizer_.validate(req.argument, req.worker_result);
   }
 
-  if(action == "analyze" || action == "analyze_objects" || action == "analyze_object")
+  if(action == "analyze" || action == "analyze_objects" || action == "analyze_object" || action == "analyze_person")
   {
     return analyze_authorizer_.validate(req.argument, req.worker_result);
   }

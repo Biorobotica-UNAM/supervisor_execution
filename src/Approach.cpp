@@ -10,7 +10,9 @@ ActionValidationResult Approach::validate(
   const auto normalized_result = supervisor_execution::string_utils::normalize(worker_result);
   const auto matches_result_token = [&normalized_result](const std::string & token) {
     return normalized_result == token ||
-           supervisor_execution::string_utils::startsWith(normalized_result, token + ";");
+           supervisor_execution::string_utils::startsWith(normalized_result, token + ";") ||
+           supervisor_execution::string_utils::startsWith(normalized_result, token + ":") ||
+           supervisor_execution::string_utils::startsWith(normalized_result, token + " ");
   };
 
   if (normalized_argument.empty())
@@ -21,10 +23,25 @@ ActionValidationResult Approach::validate(
       supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
+  if (matches_result_token("already_within_person_tolerance") ||
+      matches_result_token("already_close") ||
+      matches_result_token("approach_not_needed_already_close") ||
+      matches_result_token("target_already_close") ||
+      matches_result_token("partial_goal_already_close") ||
+      supervisor_execution::string_utils::startsWith(
+        normalized_result, "already_") ||
+      supervisor_execution::string_utils::startsWith(
+        normalized_result, "approach_not_needed"))
+  {
+    return makeSuccess("Target '" + argument + "' is already close; approach not needed");
+  }
+
   if (matches_result_token("success") ||
       matches_result_token("arrived_by_tf_fallback") ||
-      matches_result_token("partial_goal_already_close") ||
       matches_result_token("partial_arrived_by_tf_fallback") ||
+      matches_result_token("person_obstacle_confirmed") ||
+      supervisor_execution::string_utils::startsWith(
+        normalized_result, "person_obstacle_confirmed") ||
       supervisor_execution::string_utils::startsWith(
         normalized_result, "navigation_status=succeeded") ||
       supervisor_execution::string_utils::startsWith(

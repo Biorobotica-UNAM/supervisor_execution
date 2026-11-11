@@ -29,6 +29,8 @@
 #include "supervisor_execution/VerifyTake.hpp"
 #include "supervisor_execution/Fold.hpp"
 #include "supervisor_execution/Drop.hpp"
+#include "supervisor_execution/Give.hpp"
+#include "supervisor_execution/Receive.hpp"
 #include "supervisor_execution/Analyze.hpp"
 #include "supervisor_execution/Approach.hpp"
 
@@ -78,6 +80,8 @@ private:
   Take          take_authorizer_;
   VerifyTake    verify_take_authorizer_;
   Drop          drop_authorizer_;
+  Give          give_authorizer_;
+  Receive       receive_authorizer_;
   Fold          fold_authorizer_;
   Analyze       analyze_authorizer_;
   Approach      approach_authorizer_;

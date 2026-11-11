@@ -13,7 +13,8 @@ ActionValidationResult Take::validate(
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_INVALID_ARGUMENT,
-      "Take requires a non-empty action argument. Specify the object to take.");
+      "Take requires a non-empty action argument. Specify the object to take.",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
   if (normalized_result == "timeout")
@@ -22,7 +23,9 @@ ActionValidationResult Take::validate(
   }
 
   if (normalized_result == "success" || normalized_result == "left_arm_group_take_completed" ||
-        normalized_result == "right_arm_group_take_completed")
+        normalized_result == "right_arm_group_take_completed" ||
+        normalized_result == "left_arm_group_already_holding" ||
+        normalized_result == "right_arm_group_already_holding")
   {
     return makeSuccess("Take completed for argument '" + argument + "'");
   }
@@ -32,14 +35,16 @@ ActionValidationResult Take::validate(
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
-      "Take failed for argument '" + argument + "'");
+      "Take failed for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
   if (normalized_result == "failure" || normalized_result == "invalid_manipulation_pose")
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
-      "Take failed parsing json pose for argument '" + argument + "'");
+      "Take failed parsing json pose for argument '" + argument + "'",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
   if (normalized_result == "pose_out_of_range")
@@ -54,15 +59,12 @@ ActionValidationResult Take::validate(
   {
     return makeFailure(
       supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-      "Take failed closing gripper");
+      "Take failed closing gripper",
+      supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
   }
 
-  // if (normalized_result.rfind("found:", 0) == 0)
-  // {
-  //     return makeSuccess("Take completed for argument '" + argument + "'");
-  // }
-
   return makeFailure(
-    supervisor_interfaces::msg::TaskExecutionReport::REASON_MALFORMED_RESULT,
-    "Take returned unsupported worker_result='" + worker_result + "'");
+    supervisor_interfaces::msg::TaskExecutionReport::REASON_ARGUMENT_MISMATCH,
+    "Take failed for argument '" + argument + "' (" + worker_result + ")",
+    supervisor_interfaces::msg::TaskExecutionReport::FAILURE);
 }
